@@ -1,4 +1,4 @@
-type Weather = {
+export type Weather = {
   coord: {
     lon: number;
     lat: number;
@@ -42,17 +42,24 @@ type Weather = {
   cod: number;
 };
 
-export async function getWeatherData(): Promise<Weather> {
+export async function getWeatherData(location: string): Promise<Weather> {
   const response = await fetch(
-    `http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${
+    `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${
       import.meta.env.VITE_WEATHER_KEY
     }`
   );
 
-  if (!response.ok) throw new Error('Unable to fetch weather data');
+  if (!response.ok) throw new Error(`Unable to get weather for ${location}`);
 
   const data = await response.json();
-  console.log(response);
 
   return data;
+}
+
+export async function getWeatherDataForMultipleLocations(
+  locations: string[] | readonly string[]
+): Promise<Weather[]> {
+  const allWeatherData = locations.map(async (location) => await getWeatherData(location));
+
+  return Promise.all(allWeatherData);
 }

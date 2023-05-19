@@ -1,31 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import LocationCard from '../../components/location-card/LocationCard';
 
-import { getWeatherData } from '../../services/weather-services';
+import { getWeatherDataForMultipleLocations, Weather } from '../../services/weather-services';
+import { DEFAULT_LOCATIONS } from '../../constants/locations';
 
 const Dashboard = () => {
+  const [weatherData, setWeatherData] = useState<Weather[]>([]);
+
   useEffect(() => {
-    getWeatherData().then((data) => console.log(data));
+    getWeatherDataForMultipleLocations(DEFAULT_LOCATIONS).then(setWeatherData);
   }, []);
 
   return (
     <section>
       <h1>Weather data</h1>
       <ul>
-        <li>
-          <LocationCard
-            name="London"
-            temperature={13}
-          />
-        </li>
-        <li>
-          <LocationCard
-            name="Berlin"
-            temperature={15}
-          />
-        </li>
+        {weatherData.map(({ name, main, id }) => (
+          <li key={id}>
+            <LocationCard
+              name={name}
+              temperature={main.temp}
+            />
+          </li>
+        ))}
       </ul>
     </section>
   );
