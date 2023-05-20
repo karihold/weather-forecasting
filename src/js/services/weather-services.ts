@@ -56,7 +56,7 @@ export async function getWeatherData(location: string): Promise<Weather> {
   return data;
 }
 
-export async function getWeatherDataForMultipleLocations(
+export async function getWeatherForMultipleLocations(
   locations: string[] | readonly string[]
 ): Promise<Weather[]> {
   const allWeatherData = locations.map(async (location) => await getWeatherData(location));
