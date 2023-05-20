@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import LocationCard from '../../components/location-card/LocationCard';
 
-import { getWeatherDataForMultipleLocations, Weather } from '../../services/weather-services';
-import { DEFAULT_LOCATIONS } from '../../constants/locations';
+import { getWeatherDataForMultipleLocations, Weather } from '../../../services/weather-services';
+import { DEFAULT_LOCATIONS } from '../../../constants/locations';
 
 const Dashboard = () => {
   const [weatherData, setWeatherData] = useState<Weather[]>([]);

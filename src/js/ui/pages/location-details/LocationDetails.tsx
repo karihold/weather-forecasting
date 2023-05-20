@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLoaderData, LoaderFunctionArgs } from 'react-router-dom';
 
-import { getWeatherData, Weather } from '../../services/weather-services';
+import { getWeatherData, Weather } from '../../../services/weather-services';
 
 const LocationDetails = () => {
   const { weatherData } = useLoaderData() as { weatherData: Weather };
