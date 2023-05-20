@@ -1,10 +1,24 @@
 import React from 'react';
-import { useLoaderData, LoaderFunctionArgs } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { getWeatherData, Weather } from '../../../services/weather-services';
+import { useWeather } from '../../../contexts/weather-context';
+import { capitalizeFirstLetter } from '../../../utils/text-utils';
+
+type LocationDetailsParams = {
+  location: string;
+};
 
 const LocationDetails = () => {
-  const { weatherData } = useLoaderData() as { weatherData: Weather };
+  const { location } = useParams<keyof LocationDetailsParams>() as LocationDetailsParams;
+  const { isLoadingWeather, getWeatherForLocation } = useWeather();
+
+  if (isLoadingWeather) return <p>Loading weather data</p>;
+
+  const weatherData = getWeatherForLocation(location);
+
+  if (!weatherData) {
+    throw new Error(`Could not find weather data for ${capitalizeFirstLetter(location)}`);
+  }
 
   return (
     <section>
@@ -24,13 +38,5 @@ const LocationDetails = () => {
     </section>
   );
 };
-
-export async function locationDetailsLoader({ params }: LoaderFunctionArgs) {
-  if (!params.locationName) throw new Error('Could not load location weather data');
-
-  const weatherData = await getWeatherData(params.locationName);
-
-  return { weatherData };
-}
 
 export default LocationDetails;

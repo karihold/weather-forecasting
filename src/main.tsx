@@ -5,9 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { WeatherProvider } from './js/contexts/weather-context';
 import Dashboard from './js/ui/pages/dashboard/Dashboard';
 import ErrorPage from './js/ui/pages/error-page/ErrorPage';
-import LocationDetails, {
-  locationDetailsLoader,
-} from './js/ui/pages/location-details/LocationDetails';
+import LocationDetails from './js/ui/pages/location-details/LocationDetails';
 
 import './index.scss';
 
@@ -18,7 +16,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'details/:locationName',
+    path: 'details/:location',
     element: <LocationDetails />,
     errorElement: <ErrorPage />,
   },

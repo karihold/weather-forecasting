@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+
+import { useWeather } from '../../../contexts/weather-context';
+import { toLowerCaseAndHyphenateText } from '../../../utils/text-utils';
 
 import LocationCard from '../../components/location-card/LocationCard';
 
-import { getWeatherDataForMultipleLocations, Weather } from '../../../services/weather-services';
-import { DEFAULT_LOCATIONS } from '../../../constants/locations';
-
 const Dashboard = () => {
-  const [weatherData, setWeatherData] = useState<Weather[]>([]);
-
-  useEffect(() => {
-    getWeatherDataForMultipleLocations(DEFAULT_LOCATIONS).then(setWeatherData);
-  }, []);
+  const { allWeatherData } = useWeather();
 
   return (
     <section>
       <h1>Weather data</h1>
       <ul>
-        {weatherData.map(({ name, main, id }) => (
+        {allWeatherData.map(({ name, main, id }) => (
           <li key={id}>
             <LocationCard
               name={name}
+              url={`details/${toLowerCaseAndHyphenateText(name)}`}
               temperature={main.temp}
             />
           </li>
