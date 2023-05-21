@@ -1,0 +1,33 @@
+@use '../../../../styles/breakpoints.scss';
+
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  list-style: none;
+
+  padding: 1.5rem;
+  margin: 0 auto;
+
+  max-width: 75rem;
+
+  @include breakpoints.smaller-than(68.75rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include breakpoints.smaller-than(48.75rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoints.smaller-than(32.5rem) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.location-link {
+  background-color: #fff;
+  border-radius: 0.1875rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px;
+  padding: 0.625rem 0.625rem 0.9375rem;
+}
