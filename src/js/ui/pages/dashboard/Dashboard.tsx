@@ -11,11 +11,12 @@ const Dashboard = () => {
 
   return (
     <ul>
-      {allWeatherData.map(({ name, main, id }) => (
+      {allWeatherData.map(({ name, main, id, isCurrentPosition }) => (
         <li key={id}>
           <LocationCard
             name={name}
             url={`details/${toLowerCaseAndHyphenateText(name)}`}
+            isCurrentLocation={isCurrentPosition}
             temperature={{
               value: convertTemperature(Math.floor(main.temp), temperatureUnit),
               unit: temperatureUnit,

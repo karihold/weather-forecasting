@@ -7,16 +7,24 @@ import DegreeLabel from '../degree-label/DegreeLabel';
 type LocationTypeProps = {
   name: string;
   url: string;
+  isCurrentLocation?: boolean;
   temperature: {
     unit: TemperatureUnit;
     value: number;
   };
 };
 
-const LocationCard = ({ name, url, temperature }: LocationTypeProps) => {
+const LocationCard = ({ name, url, isCurrentLocation = false, temperature }: LocationTypeProps) => {
   return (
     <Link to={url}>
-      <span>{name}</span>
+      {isCurrentLocation ? (
+        <>
+          <span>My Location</span>
+          <span>({name})</span>
+        </>
+      ) : (
+        <span>{name}</span>
+      )}
       <DegreeLabel {...temperature} />
     </Link>
   );

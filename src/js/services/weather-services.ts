@@ -40,6 +40,7 @@ export type Weather = {
   id: number;
   name: string;
   cod: number;
+  isCurrentPosition?: boolean;
 };
 
 export async function getWeatherForLocation(location: string): Promise<Weather> {

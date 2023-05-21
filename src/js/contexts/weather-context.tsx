@@ -48,9 +48,12 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     let weatherForStoreLocations = [] as Weather[];
 
     if (currentCoordinates) {
-      weatherForCurrentPosition = [
-        await getWeatherForCoordinates(currentCoordinates.lat, currentCoordinates.lon),
-      ];
+      const weatherDataForMyLocation = await getWeatherForCoordinates(
+        currentCoordinates.lat,
+        currentCoordinates.lon
+      );
+
+      weatherForCurrentPosition = [{ ...weatherDataForMyLocation, isCurrentPosition: true }];
     }
 
     if (storedLocations) {
@@ -80,7 +83,8 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   async function getMyLocation() {
     const { lat, lon } = await getCurrentLocation();
 
-    const weatherForMyLocation = await getWeatherForCoordinates(lat, lon);
+    const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
+    const weatherForMyLocation = { ...weatherDataFromApi, isCurrentPosition: true } as Weather;
 
     setWeatherData((currentWeatherData) => [weatherForMyLocation, ...currentWeatherData]);
   }
