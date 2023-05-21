@@ -6,8 +6,8 @@ type SpeedLabelProps = {
 };
 
 const SpeedSymbols: { [key in DistanceUnit]: string } = {
-  metric: 'm/s',
-  imperial: 'mph',
+  metric: ' m/s',
+  imperial: ' mph',
 };
 
 const SpeedLabel = ({ value }: SpeedLabelProps) => {

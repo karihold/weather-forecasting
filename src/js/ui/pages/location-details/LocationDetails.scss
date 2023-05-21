@@ -7,12 +7,13 @@
 
   max-width: 75rem;
   margin: 0 auto;
+  padding: 1.5rem 1rem;
 
   @include breakpoints.smaller-than(35rem) {
     flex-flow: column;
     gap: 1.5rem;
 
-    padding: 1rem 0.5rem;
+    padding: 1.5rem 0.5rem;
   }
 }
 

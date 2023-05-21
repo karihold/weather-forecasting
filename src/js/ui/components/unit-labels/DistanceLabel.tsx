@@ -6,8 +6,8 @@ type DistanceLabelProps = {
 };
 
 const DistanceSymbols: { [key in DistanceUnit]: string } = {
-  metric: 'km',
-  imperial: 'miles',
+  metric: ' km',
+  imperial: ' miles',
 };
 
 const DistanceLabel = ({ value }: DistanceLabelProps) => {
