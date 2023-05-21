@@ -1,16 +1,29 @@
 import { createContext, useContext, useEffect, useState, useRef, ReactNode } from 'react';
 
-import { getWeatherForMultipleLocations, Weather } from '../services/weather-services';
+import {
+  getWeatherForCoordinates,
+  getWeatherForLocation,
+  getWeatherForMultipleLocations,
+  Weather,
+} from '../services/weather-services';
 import { toLowerCaseAndHyphenateText } from '../utils/text-utils';
+import {
+  getCurrentLocationFromLocalStorage,
+  getCurrentLocation,
+  setLocationInLocaleStorage,
+  getLocationsFromLocaleStorage,
+} from '../utils/location-utils';
 import { DEFAULT_LOCATIONS } from '../constants/locations';
 
 type WeatherContext = {
   allWeatherData: Weather[];
-  getWeatherForLocation: (location: string) => Weather | undefined;
+  getWeatherDataForLocation: (location: string) => Weather | undefined;
+  addLocationWeather: (location: string) => Promise<void>;
+  getMyLocation: () => void;
   isLoadingWeather: boolean;
 };
 
-export const WeatherContext = createContext<WeatherContext>({} as WeatherContext);
+const WeatherContext = createContext<WeatherContext>({} as WeatherContext);
 
 export const useWeather = () => useContext<WeatherContext>(WeatherContext);
 
@@ -29,11 +42,47 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   }, []);
 
   async function initWeatherData() {
-    const allWeatherData = await getWeatherForMultipleLocations(DEFAULT_LOCATIONS);
+    const currentCoordinates = getCurrentLocationFromLocalStorage();
+    const storedLocations = getLocationsFromLocaleStorage();
+    let weatherForCurrentPosition = [] as Weather[];
+    let weatherForStoreLocations = [] as Weather[];
 
-    addLocationsToWeatherMap(allWeatherData);
-    setWeatherData(allWeatherData);
+    if (currentCoordinates) {
+      weatherForCurrentPosition = [
+        await getWeatherForCoordinates(currentCoordinates.lat, currentCoordinates.lon),
+      ];
+    }
+
+    if (storedLocations) {
+      weatherForStoreLocations = await getWeatherForMultipleLocations(storedLocations);
+    }
+
+    const allWeatherDataFromApi = await getWeatherForMultipleLocations(DEFAULT_LOCATIONS);
+    const combinedWeatherData = [
+      ...weatherForCurrentPosition,
+      ...allWeatherDataFromApi,
+      ...weatherForStoreLocations,
+    ];
+
+    addLocationsToWeatherMap(combinedWeatherData);
+    setWeatherData(combinedWeatherData);
     setIsLoadingWeather(false);
+  }
+
+  async function addLocationWeather(location: string) {
+    const weather = await getWeatherForLocation(location);
+
+    setLocationInLocaleStorage(location);
+
+    setWeatherData((currentWeatherData) => [...currentWeatherData, weather]);
+  }
+
+  async function getMyLocation() {
+    const { lat, lon } = await getCurrentLocation();
+
+    const weatherForMyLocation = await getWeatherForCoordinates(lat, lon);
+
+    setWeatherData((currentWeatherData) => [weatherForMyLocation, ...currentWeatherData]);
   }
 
   function addLocationsToWeatherMap(allWeatherData: Weather[]) {
@@ -44,12 +93,20 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     });
   }
 
-  function getWeatherForLocation(location: string) {
+  function getWeatherDataForLocation(location: string) {
     return weatherMap.current.get(location);
   }
 
   return (
-    <WeatherContext.Provider value={{ allWeatherData, getWeatherForLocation, isLoadingWeather }}>
+    <WeatherContext.Provider
+      value={{
+        allWeatherData,
+        getWeatherDataForLocation,
+        addLocationWeather,
+        getMyLocation,
+        isLoadingWeather,
+      }}
+    >
       {children}
     </WeatherContext.Provider>
   );
