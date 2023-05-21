@@ -1,0 +1,9 @@
+@use '../../../../styles/colors.scss';
+
+.temperature-label {
+  color: colors.$red;
+
+  &.freezing {
+    color: colors.$blue;
+  }
+}

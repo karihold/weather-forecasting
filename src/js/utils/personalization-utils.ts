@@ -21,6 +21,22 @@ export function convertTemperature(value: number, unit: TemperatureUnit) {
   return Math.floor(value);
 }
 
+export function isTemperatureAtFreezingPoint(value: number, unit: TemperatureUnit) {
+  if (unit === 'celsius') {
+    return value <= 0;
+  }
+
+  if (unit === 'fahrenheit') {
+    return value <= 32;
+  }
+
+  if (unit === 'kelvin') {
+    return value <= 273.15;
+  }
+
+  return false;
+}
+
 // Meters set to default in api calls
 export function convertDistance(value: number, unit: DistanceUnit) {
   // Converting meters to km

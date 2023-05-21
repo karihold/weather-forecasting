@@ -55,13 +55,19 @@ const LocationDetails = () => {
         <div>
           <dt>Sunrise</dt>
           <dd>
-            <HourLabel value={sys.sunrise} />
+            <HourLabel
+              value={sys.sunrise}
+              colorCode="early"
+            />
           </dd>
         </div>
         <div>
           <dt>Sunset</dt>
           <dd>
-            <HourLabel value={sys.sunset} />
+            <HourLabel
+              value={sys.sunset}
+              colorCode="late"
+            />
           </dd>
         </div>
         <div>

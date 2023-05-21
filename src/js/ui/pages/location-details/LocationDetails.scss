@@ -2,14 +2,15 @@
 
 .weather-details {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   justify-content: space-evenly;
 
   max-width: 75rem;
   margin: 0 auto;
   padding: 1.5rem 1rem;
+  gap: 1rem;
 
-  @include breakpoints.smaller-than(35rem) {
+  @include breakpoints.smaller-than(36.25rem) {
     flex-flow: column;
     gap: 1.5rem;
 

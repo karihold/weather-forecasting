@@ -1,6 +1,8 @@
 import { DistanceUnit, usePersonalization } from '../../../contexts/personalization-context';
 import { convertSpeed } from '../../../utils/personalization-utils';
 
+import './SpeedLabel.scss';
+
 type SpeedLabelProps = {
   value: number;
 };
@@ -14,7 +16,7 @@ const SpeedLabel = ({ value }: SpeedLabelProps) => {
   const { distanceUnit } = usePersonalization();
 
   return (
-    <span>
+    <span className="speed-label">
       {convertSpeed(value, distanceUnit)}
       <span>{SpeedSymbols[distanceUnit]}</span>
     </span>

@@ -1,10 +1,12 @@
+import './HumidityLabel.scss';
+
 type HumidityLabelProps = {
   value: number;
 };
 
 const HumidityLabel = ({ value }: HumidityLabelProps) => {
   return (
-    <span>
+    <span className="humidity-label">
       {value}
       <span>%</span>
     </span>

@@ -1,0 +1,11 @@
+@use '../../../../styles/colors.scss';
+
+.hour-label {
+  &.early {
+    color: colors.$red;
+  }
+
+  &.late {
+    color: colors.$orange;
+  }
+}
