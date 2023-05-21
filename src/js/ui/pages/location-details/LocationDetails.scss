@@ -5,6 +5,9 @@
   flex-flow: row wrap;
   justify-content: space-evenly;
 
+  max-width: 75rem;
+  margin: 0 auto;
+
   @include breakpoints.smaller-than(35rem) {
     flex-flow: column;
     gap: 1.5rem;
@@ -17,6 +20,14 @@
   display: flex;
   flex-flow: column;
   align-items: center;
+
+  height: fit-content;
+
+  background-color: #fff;
+  border-radius: 0.1875rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px;
+
+  padding: 1rem;
 
   p {
     font-size: 3rem;

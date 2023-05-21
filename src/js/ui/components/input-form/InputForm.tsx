@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import './InputForm.scss';
 
 type InputFormProps = {
   onSubmit: (value: string) => void | Promise<void>;
@@ -10,9 +12,11 @@ const InputForm = ({ onSubmit, submitLabel = 'Submit' }: InputFormProps) => {
 
   return (
     <form
+      className="input-form"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit(value);
+        setValue('');
       }}
     >
       <input
