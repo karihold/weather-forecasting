@@ -43,9 +43,9 @@ export function removeCurrentLocationFromLocaleStorage() {
 }
 
 export function hasCurrentLocationInLocaleStorage() {
-  const locatinFromStorage = getCurrentLocationFromLocalStorage();
+  const locationFromStorage = getCurrentLocationFromLocalStorage();
 
-  return locatinFromStorage !== null;
+  return locationFromStorage !== null;
 }
 
 // Locations for locale storage
