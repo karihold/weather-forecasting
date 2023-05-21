@@ -6,13 +6,13 @@ import {
 
 export type TemperatureUnit = 'celsius' | 'fahrenheit' | 'kelvin';
 
-export type LengthUnit = 'metric' | 'imperial';
+export type DistanceUnit = 'metric' | 'imperial';
 
 type PersonalizationContext = {
   temperatureUnit: TemperatureUnit;
   changeTemperatureUnit: (unit: TemperatureUnit) => void;
-  lengthUnit: LengthUnit;
-  changeLengthUnit: (unit: LengthUnit) => void;
+  distanceUnit: DistanceUnit;
+  changeDistanceUnit: (unit: DistanceUnit) => void;
 };
 
 const PersonalizationContext = createContext<PersonalizationContext>({} as PersonalizationContext);
@@ -25,16 +25,16 @@ type PersonalizationProviderProps = {
 
 export const PersonalizationProvider = ({ children }: PersonalizationProviderProps) => {
   const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>('celsius');
-  const [lengthUnit, setLengthUnit] = useState<LengthUnit>('metric');
+  const [distanceUnit, setDistanceUnit] = useState<DistanceUnit>('metric');
 
   useEffect(() => {
     const storedPersonalization = getPersonalizationFromLocaleStorage();
 
     if (storedPersonalization) {
-      const { length, temperature } = storedPersonalization;
+      const { distance, temperature } = storedPersonalization;
 
       setTemperatureUnit(temperature);
-      setLengthUnit(length);
+      setDistanceUnit(distance);
     }
   }, []);
 
@@ -44,15 +44,15 @@ export const PersonalizationProvider = ({ children }: PersonalizationProviderPro
     setPersonalizationInLocaleStorage('temperature', unit);
   }
 
-  function changeLengthUnit(unit: LengthUnit) {
-    setLengthUnit(unit);
+  function changeDistanceUnit(unit: DistanceUnit) {
+    setDistanceUnit(unit);
 
-    setPersonalizationInLocaleStorage('length', unit);
+    setPersonalizationInLocaleStorage('distance', unit);
   }
 
   return (
     <PersonalizationContext.Provider
-      value={{ temperatureUnit, changeTemperatureUnit, lengthUnit, changeLengthUnit }}
+      value={{ temperatureUnit, changeTemperatureUnit, distanceUnit, changeDistanceUnit }}
     >
       {children}
     </PersonalizationContext.Provider>

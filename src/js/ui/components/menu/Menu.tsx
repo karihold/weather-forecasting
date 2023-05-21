@@ -4,7 +4,7 @@ import { useWeather } from '../../../contexts/weather-context';
 import {
   usePersonalization,
   TemperatureUnit,
-  LengthUnit,
+  DistanceUnit,
 } from '../../../contexts/personalization-context';
 
 import InputForm from '../input-form/InputForm';
@@ -16,7 +16,7 @@ type MenuProps = {
 
 const Menu = ({ show }: MenuProps) => {
   const { addLocationWeather, getMyLocation } = useWeather();
-  const { temperatureUnit, changeTemperatureUnit, lengthUnit, changeLengthUnit } =
+  const { temperatureUnit, changeTemperatureUnit, distanceUnit, changeDistanceUnit } =
     usePersonalization();
 
   if (!show) return <></>;
@@ -38,13 +38,13 @@ const Menu = ({ show }: MenuProps) => {
           { label: 'Kelvin', value: 'kelvin', isChecked: temperatureUnit === 'kelvin' },
         ]}
       />
-      <RadioGroup<LengthUnit>
+      <RadioGroup<DistanceUnit>
         name="unit-of-length"
         legend="Length"
-        onChange={changeLengthUnit}
+        onChange={changeDistanceUnit}
         options={[
-          { label: 'Metric', value: 'metric', isChecked: lengthUnit === 'metric' },
-          { label: 'Imperial', value: 'imperial', isChecked: lengthUnit === 'imperial' },
+          { label: 'Metric', value: 'metric', isChecked: distanceUnit === 'metric' },
+          { label: 'Imperial', value: 'imperial', isChecked: distanceUnit === 'imperial' },
         ]}
       />
     </section>

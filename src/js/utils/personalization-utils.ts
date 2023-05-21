@@ -1,4 +1,4 @@
-import { LengthUnit, TemperatureUnit } from '../contexts/personalization-context';
+import { DistanceUnit, TemperatureUnit } from '../contexts/personalization-context';
 
 const STORED_PERSONALIZATION_KEY = 'stored-personalization' as const;
 
@@ -18,22 +18,22 @@ export function convertTemperature(value: number, unit: TemperatureUnit) {
 }
 
 // Metric set to default in api calls
-export function convertMetric(value: number, unit: LengthUnit) {
+export function convertMetric(value: number, unit: DistanceUnit) {
   if (unit === 'metric') return value;
 
   return value;
 }
 
 // Locale storage
-type PersonalizationType = 'temperature' | 'length';
+type PersonalizationType = 'temperature' | 'distance';
 type StoredPersonalization = {
   temperature: TemperatureUnit;
-  length: LengthUnit;
+  distance: DistanceUnit;
 };
 
 export function setPersonalizationInLocaleStorage(
   key: PersonalizationType,
-  value: TemperatureUnit | LengthUnit
+  value: TemperatureUnit | DistanceUnit
 ) {
   const storedPersonalization = getPersonalizationFromLocaleStorage();
 
