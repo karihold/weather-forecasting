@@ -4,22 +4,50 @@ const STORED_PERSONALIZATION_KEY = 'stored-personalization' as const;
 
 // Celsius set as default in the api calls
 export function convertTemperature(value: number, unit: TemperatureUnit) {
-  if (unit === 'celsius') return value;
+  if (unit === 'celsius') {
+    return Math.floor(value);
+  }
 
   if (unit === 'fahrenheit') {
-    return value * (9 / 5) + 32;
+    return Math.floor(value * (9 / 5) + 32);
   }
 
   if (unit === 'kelvin') {
-    return value + 273.15;
+    const kelvinValue = value + 273.15;
+    // To make sure that the conversion only contains two decimals at the end
+    return Math.floor(kelvinValue * 100) / 100;
+  }
+
+  return Math.floor(value);
+}
+
+// Meters set to default in api calls
+export function convertDistance(value: number, unit: DistanceUnit) {
+  // Converting meters to km
+  if (unit === 'metric') {
+    return value / 1000;
+  }
+
+  if (unit === 'imperial') {
+    const oneMeterInMiles = 0.000621;
+
+    return value * oneMeterInMiles;
   }
 
   return value;
 }
 
-// Metric set to default in api calls
-export function convertMetric(value: number, unit: DistanceUnit) {
+// Meters per second set to default in api calls
+export function convertSpeed(value: number, unit: DistanceUnit) {
   if (unit === 'metric') return value;
+
+  if (unit === 'imperial') {
+    const oneMeterPerSecondInMilesPerHour = 2.2369;
+    const milesPerHourValue = value * oneMeterPerSecondInMilesPerHour;
+
+    // To make sure that the conversion only contains two decimals at the end
+    return Math.floor(milesPerHourValue * 100) / 100;
+  }
 
   return value;
 }
