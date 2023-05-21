@@ -16,8 +16,6 @@ export async function getCurrentLocation(): Promise<CurrentCoordinates> {
 }
 
 function onGetLocationSuccess(position: GeolocationPosition) {
-  setCurrentLocationInLocalStorage(position);
-
   return { lat: position.coords.latitude, lon: position.coords.longitude };
 }
 
@@ -27,12 +25,9 @@ function onGetLocationError(error: GeolocationPositionError) {
   throw new Error('Unable to retrieve your current location');
 }
 
-// Locale storage
-export function setCurrentLocationInLocalStorage({ coords }: GeolocationPosition) {
-  localStorage.setItem(
-    CURRENT_LOCATION_KEY,
-    JSON.stringify({ lat: coords.latitude, lon: coords.longitude })
-  );
+// Current location for locale storage
+export function setCurrentLocationInLocalStorage(coordinates: CurrentCoordinates) {
+  localStorage.setItem(CURRENT_LOCATION_KEY, JSON.stringify(coordinates));
 }
 
 export function getCurrentLocationFromLocalStorage(): CurrentCoordinates | null {
@@ -46,6 +41,14 @@ export function getCurrentLocationFromLocalStorage(): CurrentCoordinates | null 
 export function removeCurrentLocationFromLocaleStorage() {
   localStorage.removeItem(CURRENT_LOCATION_KEY);
 }
+
+export function hasCurrentLocationInLocaleStorage() {
+  const locatinFromStorage = getCurrentLocationFromLocalStorage();
+
+  return locatinFromStorage !== null;
+}
+
+// Locations for locale storage
 
 export function setLocationInLocaleStorage(location: string) {
   const currentlyStoredLocations = getLocationsFromLocaleStorage();

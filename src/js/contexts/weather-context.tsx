@@ -8,10 +8,12 @@ import {
 } from '../services/weather-services';
 import { toLowerCaseAndHyphenateText } from '../utils/text-utils';
 import {
+  setCurrentLocationInLocalStorage,
   getCurrentLocationFromLocalStorage,
   getCurrentLocation,
   setLocationInLocaleStorage,
   getLocationsFromLocaleStorage,
+  hasCurrentLocationInLocaleStorage,
 } from '../utils/location-utils';
 import { DEFAULT_LOCATIONS } from '../constants/locations';
 
@@ -86,7 +88,15 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
     const weatherForMyLocation = { ...weatherDataFromApi, isCurrentPosition: true } as Weather;
 
-    setWeatherData((currentWeatherData) => [weatherForMyLocation, ...currentWeatherData]);
+    setWeatherData((currentWeatherData) => {
+      const currentWeatherDataToKeep = hasCurrentLocationInLocaleStorage()
+        ? currentWeatherData.slice(1)
+        : currentWeatherData;
+
+      return [weatherForMyLocation, ...currentWeatherDataToKeep];
+    });
+
+    setCurrentLocationInLocalStorage({ lat, lon });
   }
 
   function addLocationsToWeatherMap(allWeatherData: Weather[]) {
