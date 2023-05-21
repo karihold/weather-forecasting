@@ -42,9 +42,9 @@ export type Weather = {
   cod: number;
 };
 
-export async function getWeatherData(location: string): Promise<Weather> {
+export async function getWeatherForLocation(location: string): Promise<Weather> {
   const response = await fetch(
-    `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${
+    `http://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${
       import.meta.env.VITE_WEATHER_KEY
     }`
   );
@@ -56,10 +56,24 @@ export async function getWeatherData(location: string): Promise<Weather> {
   return data;
 }
 
+export async function getWeatherForCoordinates(lat: number, lon: number): Promise<Weather> {
+  const response = await fetch(
+    `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${
+      import.meta.env.VITE_WEATHER_KEY
+    }`
+  );
+
+  if (!response.ok) throw new Error(`Unable to get weather for lat: ${lat} lon: ${lon}`);
+
+  const data = await response.json();
+
+  return data;
+}
+
 export async function getWeatherForMultipleLocations(
   locations: string[] | readonly string[]
 ): Promise<Weather[]> {
-  const allWeatherData = locations.map(async (location) => await getWeatherData(location));
+  const allWeatherData = locations.map(async (location) => await getWeatherForLocation(location));
 
   return Promise.all(allWeatherData);
 }
