@@ -1,17 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { TemperatureUnit, usePersonalization } from '../../../contexts/personalization-context';
-import DegreeLabel from '../degree-label/DegreeLabel';
+import TemperatureLabel from '../unit-labels/TemperatureLabel';
 
 type LocationTypeProps = {
   name: string;
   url: string;
   isCurrentLocation?: boolean;
-  temperature: {
-    unit: TemperatureUnit;
-    value: number;
-  };
+  temperature: number;
 };
 
 const LocationCard = ({ name, url, isCurrentLocation = false, temperature }: LocationTypeProps) => {
@@ -25,7 +20,7 @@ const LocationCard = ({ name, url, isCurrentLocation = false, temperature }: Loc
       ) : (
         <span>{name}</span>
       )}
-      <DegreeLabel {...temperature} />
+      <TemperatureLabel value={temperature} />
     </Link>
   );
 };
