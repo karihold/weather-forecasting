@@ -1,4 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
+
+import './RadioButton.scss';
 
 export type RadioButtonProps<T extends string | number> = {
   label: string;
@@ -16,9 +18,9 @@ const RadioButton = <T extends string | number>({
   isChecked,
 }: RadioButtonProps<T>) => {
   return (
-    <label>
-      {label}
+    <label className="radio-label">
       <input
+        className="radio-button"
         name={name}
         type="radio"
         value={value}
@@ -26,6 +28,7 @@ const RadioButton = <T extends string | number>({
         checked={isChecked}
         readOnly={!onChange}
       />
+      {label}
     </label>
   );
 };

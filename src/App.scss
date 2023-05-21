@@ -1,0 +1,43 @@
+@use './styles/breakpoints.scss';
+
+header {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px;
+  background-color: #fff;
+}
+
+.main-title-wrapper {
+  text-align: center;
+  max-width: 75rem;
+  width: 100%;
+  position: relative;
+}
+
+.back-link {
+  font-size: 2rem;
+  position: absolute;
+  left: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
+}
+
+.personalization-menu {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 2rem;
+
+  margin: 1.5rem auto 1rem;
+
+  max-width: 75rem;
+
+  @include breakpoints.smaller-than(31.25rem) {
+    flex-flow: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

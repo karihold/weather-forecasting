@@ -1,6 +1,6 @@
-import React from 'react';
-
 import RadioButton, { RadioButtonProps } from './RadioButton';
+
+import './RadioGroup.scss';
 
 type RadioGroupProps<T extends string | number> = {
   onChange: (value: T) => void;
@@ -16,8 +16,11 @@ const RadioGroup = <T extends string | number>({
   options,
 }: RadioGroupProps<T>) => {
   return (
-    <fieldset onChange={(event) => onChange((event.target as HTMLInputElement).value as T)}>
-      <legend>{legend}</legend>
+    <fieldset
+      className="radio-group"
+      onChange={(event) => onChange((event.target as HTMLInputElement).value as T)}
+    >
+      <legend className="radio-group-legend">{legend}</legend>
       {options.map((option, index) => (
         <RadioButton
           key={index}
