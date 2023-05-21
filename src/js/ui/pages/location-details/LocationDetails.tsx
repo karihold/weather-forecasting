@@ -10,11 +10,11 @@ type LocationDetailsParams = {
 
 const LocationDetails = () => {
   const { location } = useParams<keyof LocationDetailsParams>() as LocationDetailsParams;
-  const { isLoadingWeather, getWeatherForLocation } = useWeather();
+  const { isLoadingWeather, getWeatherDataForLocation } = useWeather();
 
   if (isLoadingWeather) return <p>Loading weather data</p>;
 
-  const weatherData = getWeatherForLocation(location);
+  const weatherData = getWeatherDataForLocation(location);
 
   if (!weatherData) {
     throw new Error(`Could not find weather data for ${capitalizeFirstLetter(location)}`);
