@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import TemperatureLabel from '../unit-labels/TemperatureLabel';
 
+import './LocationCard.scss';
+
 type LocationTypeProps = {
   name: string;
   url: string;
@@ -11,15 +13,11 @@ type LocationTypeProps = {
 
 const LocationCard = ({ name, url, isCurrentLocation = false, temperature }: LocationTypeProps) => {
   return (
-    <Link to={url}>
-      {isCurrentLocation ? (
-        <>
-          <span>My Location</span>
-          <span>({name})</span>
-        </>
-      ) : (
-        <span>{name}</span>
-      )}
+    <Link
+      className="location-card"
+      to={url}
+    >
+      {isCurrentLocation ? <span>My Location ({name})</span> : <span>{name}</span>}
       <TemperatureLabel value={temperature} />
     </Link>
   );
