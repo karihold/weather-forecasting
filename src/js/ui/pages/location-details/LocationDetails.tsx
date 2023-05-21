@@ -1,8 +1,15 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useWeather } from '../../../contexts/weather-context';
 import { capitalizeFirstLetter } from '../../../utils/text-utils';
+
+import TemperatureLabel from '../../components/unit-labels/TemperatureLabel';
+import DistanceLabel from '../../components/unit-labels/DistanceLabel';
+import SpeedLabel from '../../components/unit-labels/SpeedLabel';
+import HumidityLabel from '../../components/unit-labels/HumidityLabel';
+import HourLabel from '../../components/unit-labels/HourLabel';
+
+import './LocationDetails.scss';
 
 type LocationDetailsParams = {
   location: string;
@@ -20,22 +27,59 @@ const LocationDetails = () => {
     throw new Error(`Could not find weather data for ${capitalizeFirstLetter(location)}`);
   }
 
+  const { weather, main, sys, visibility, wind } = weatherData;
+
   return (
-    <section>
-      <h1>Welcomet to {weatherData.name}</h1>
-      <section>
-        <p>{weatherData.weather[0].description}</p>
-        <p>{weatherData.main.temp}</p>
-        <p>{weatherData.main.temp_max}</p>
-        <p>{weatherData.main.temp_min}</p>
-      </section>
-      <section>
-        <p>{weatherData.sys.sunrise}</p>
-        <p>{weatherData.sys.sunset}</p>
-        <p>{weatherData.main.humidity}</p>
-        <p>{weatherData.visibility}</p>
-      </section>
-    </section>
+    <div className="weather-details">
+      <article className="temperature-details">
+        <h2>{weather[0].description}</h2>
+        <p>
+          <TemperatureLabel value={main.temp} />
+        </p>
+        <dl>
+          <div>
+            <dt>Highest:</dt>
+            <dd>
+              <TemperatureLabel value={main.temp_max} />
+            </dd>
+          </div>
+          <div>
+            <dt>Lowest:</dt>
+            <dd>
+              <TemperatureLabel value={main.temp_min} />
+            </dd>
+          </div>
+        </dl>
+      </article>
+      <dl className="additional-details-section">
+        <div>
+          <dt>Sunrise</dt>
+          <dd>
+            <HourLabel value={sys.sunrise} />
+          </dd>
+        </div>
+        <div>
+          <dt>Sunset</dt>
+          <dd>
+            <HourLabel value={sys.sunset} />
+          </dd>
+        </div>
+        <div>
+          <dt>Visiblity</dt>
+          <dd>
+            <DistanceLabel value={visibility} />
+          </dd>
+        </div>
+        <div>
+          <dt>Wind</dt>
+          <SpeedLabel value={wind.speed} />
+        </div>
+        <div>
+          <dt>Humidity</dt>
+          <HumidityLabel value={main.humidity} />
+        </div>
+      </dl>
+    </div>
   );
 };
 
