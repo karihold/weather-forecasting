@@ -75,11 +75,16 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   }
 
   async function addLocationWeather(location: string) {
-    const weather = await getWeatherForLocation(location);
+    const weatherForLocation = await getWeatherForLocation(location);
 
     setLocationInLocaleStorage(location);
+    addLocationsToWeatherMap([weatherForLocation]);
 
-    setWeatherData((currentWeatherData) => [...currentWeatherData, weather]);
+    setWeatherData((currentWeatherData) => {
+      const updatedWeatherData = [...currentWeatherData, weatherForLocation];
+
+      return updatedWeatherData;
+    });
   }
 
   async function getMyLocation() {
@@ -88,15 +93,17 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
     const weatherForMyLocation = { ...weatherDataFromApi, isCurrentPosition: true } as Weather;
 
+    addLocationsToWeatherMap([weatherForMyLocation]);
+
     setWeatherData((currentWeatherData) => {
       const currentWeatherDataToKeep = hasCurrentLocationInLocaleStorage()
         ? currentWeatherData.slice(1)
         : currentWeatherData;
 
+      setCurrentLocationInLocalStorage({ lat, lon });
+
       return [weatherForMyLocation, ...currentWeatherDataToKeep];
     });
-
-    setCurrentLocationInLocalStorage({ lat, lon });
   }
 
   function addLocationsToWeatherMap(allWeatherData: Weather[]) {
