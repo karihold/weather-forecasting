@@ -1,1 +1,1 @@
-export const DEFAULT_LOCATIONS = ['London', 'Berlin'] as const;
+export const DEFAULT_LOCATIONS = ['london', 'berlin', 'paris'] as const;
