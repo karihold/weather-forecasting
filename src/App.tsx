@@ -1,4 +1,4 @@
-import { Outlet, Link, useMatch } from 'react-router-dom';
+import { Outlet, Link, useMatch, useLocation } from 'react-router-dom';
 
 import {
   TemperatureUnit,
@@ -6,6 +6,7 @@ import {
   usePersonalization,
 } from './js/contexts/personalization-context';
 import { useWeather } from './js/contexts/weather-context';
+import { capitalizeFirstLetter } from './js/utils/text-utils';
 
 import InputForm from './js/ui/components/input-form/InputForm';
 import RadioGroup from './js/ui/components/radio-button/RadioGroup';
@@ -14,16 +15,35 @@ import './App.scss';
 
 const App = () => {
   const { addLocationWeather, getMyLocation } = useWeather();
+  const location = useLocation();
   const { temperatureUnit, changeTemperatureUnit, distanceUnit, changeDistanceUnit } =
     usePersonalization();
 
   const isAtDashboard = useMatch('/');
+  const isAtDetails = useMatch('/details/:location');
+
+  function getTitle() {
+    if (isAtDashboard) {
+      return 'Dashboard';
+    }
+
+    if (isAtDetails) {
+      const slugs = location.pathname.split('/');
+      const locationName = slugs[slugs.length - 1];
+
+      return capitalizeFirstLetter(locationName).replace('-', ' ');
+    }
+
+    return 'Dashboard';
+  }
 
   return (
     <>
       <header>
-        {!isAtDashboard && <Link to="/">Back</Link>}
-        <h1>Test</h1>{' '}
+        <div>
+          {!isAtDashboard && <Link to="/">Back</Link>}
+          <h1>{getTitle()}</h1>
+        </div>
         <section className="personalization-menu">
           <button onClick={getMyLocation}>Get my location</button>
           <InputForm
