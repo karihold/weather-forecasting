@@ -19,7 +19,12 @@ const InputForm = ({ onSubmit, submitLabel = 'Submit' }: InputFormProps) => {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
-      <button type="submit">{submitLabel}</button>
+      <button
+        type="submit"
+        disabled={!value}
+      >
+        {submitLabel}
+      </button>
     </form>
   );
 };
