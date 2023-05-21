@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { useWeather } from '../../../contexts/weather-context';
 import { toLowerCaseAndHyphenateText } from '../../../utils/text-utils';
+import { usePersonalization } from '../../../contexts/personalization-context';
+import { convertTemperature } from '../../../utils/personalization-utils';
 
 import Menu from '../../components/menu/Menu';
 import LocationCard from '../../components/location-card/LocationCard';
@@ -9,6 +11,7 @@ import LocationCard from '../../components/location-card/LocationCard';
 const Dashboard = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const { allWeatherData } = useWeather();
+  const { temperatureUnit } = usePersonalization();
 
   return (
     <section>
@@ -24,7 +27,10 @@ const Dashboard = () => {
             <LocationCard
               name={name}
               url={`details/${toLowerCaseAndHyphenateText(name)}`}
-              temperature={main.temp}
+              temperature={{
+                value: convertTemperature(Math.floor(main.temp), temperatureUnit),
+                unit: temperatureUnit,
+              }}
             />
           </li>
         ))}
