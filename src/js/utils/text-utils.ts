@@ -6,5 +6,5 @@ export function capitalizeFirstLetter(word: string) {
 }
 
 export function toLowerCaseAndHyphenateText(text: string) {
-  return text.toLocaleLowerCase(text).replace(/\s/gm, '-');
+  return text.toLocaleLowerCase().replace(/\s/gm, '-');
 }
