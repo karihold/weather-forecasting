@@ -16,7 +16,8 @@ type MenuProps = {
 
 const Menu = ({ show }: MenuProps) => {
   const { addLocationWeather, getMyLocation } = useWeather();
-  const { temperatureUnit, setTemperatureUnit, lengthUnit, setLengthUnit } = usePersonalization();
+  const { temperatureUnit, changeTemperatureUnit, lengthUnit, changeLengthUnit } =
+    usePersonalization();
 
   if (!show) return <></>;
 
@@ -30,20 +31,20 @@ const Menu = ({ show }: MenuProps) => {
       <RadioGroup<TemperatureUnit>
         name="unit-of-temperature"
         legend="Temperature"
-        onChange={setTemperatureUnit}
+        onChange={changeTemperatureUnit}
         options={[
           { label: 'Celsius', value: 'celsius', isChecked: temperatureUnit === 'celsius' },
-          { label: 'Farenheit', value: 'farenheit', isChecked: temperatureUnit === 'farenheit' },
+          { label: 'Farenheit', value: 'fahrenheit', isChecked: temperatureUnit === 'fahrenheit' },
           { label: 'Kelvin', value: 'kelvin', isChecked: temperatureUnit === 'kelvin' },
         ]}
       />
       <RadioGroup<LengthUnit>
         name="unit-of-length"
         legend="Length"
-        onChange={setLengthUnit}
+        onChange={changeLengthUnit}
         options={[
-          { label: 'Metric', value: 'imperial', isChecked: lengthUnit === 'metric' },
-          { label: 'Imperial', value: 'metric', isChecked: lengthUnit === 'imperial' },
+          { label: 'Metric', value: 'metric', isChecked: lengthUnit === 'metric' },
+          { label: 'Imperial', value: 'imperial', isChecked: lengthUnit === 'imperial' },
         ]}
       />
     </section>
