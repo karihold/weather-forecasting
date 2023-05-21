@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TemperatureUnit, usePersonalization } from '../../../contexts/personalization-context';
 import { convertTemperature } from '../../../utils/personalization-utils';
 
