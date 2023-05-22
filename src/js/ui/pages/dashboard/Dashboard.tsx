@@ -7,8 +7,7 @@ import LocationLink from '../../components/location-link/LocationLink';
 import './Dashboard.scss';
 
 const Dashboard = () => {
-  const { addLocationWeather, getMyLocation } = useWeather();
-  const { allWeatherData } = useWeather();
+  const { allWeatherData, addLocationWeather, getMyLocation } = useWeather();
 
   return (
     <section className="dashboard">
