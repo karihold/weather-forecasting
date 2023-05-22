@@ -1,0 +1,28 @@
+@use '../../../../styles/colors.scss';
+
+.error-page {
+  margin: 2.625rem auto 1.5rem;
+  padding: 1.5rem;
+
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  max-width: 50rem;
+
+  background-color: #fff;
+  border-radius: 0.1875rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px;
+}
+
+.error-status-and-text {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 8px;
+  color: colors.$red;
+}
+
+.error-message {
+  color: colors.$red;
+}
