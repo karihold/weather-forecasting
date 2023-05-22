@@ -8,7 +8,35 @@ import LocationLink from '../../components/location-link/LocationLink';
 import './Dashboard.scss';
 
 const Dashboard = () => {
-  const { allWeatherData, addLocation, isLoadingWeather, getMyLocation } = useWeather();
+  const {
+    allWeatherData,
+    addLocation,
+    isLoadingWeather,
+    getMyLocation,
+    errorWithWeather,
+    initWeatherData,
+  } = useWeather();
+
+  if (errorWithWeather) {
+    if (errorWithWeather.type === 'Add location' || errorWithWeather.type === 'My location') {
+      throw new Error(errorWithWeather.message);
+    }
+
+    if (errorWithWeather.type === 'Initialize') {
+      return (
+        <section className="error-page">
+          <h2>Unable to initialize data</h2>
+          <p className="error-message">{errorWithWeather.message}</p>
+          <button
+            type="button"
+            onClick={initWeatherData}
+          >
+            Try again
+          </button>
+        </section>
+      );
+    }
+  }
 
   return (
     <section className="dashboard">

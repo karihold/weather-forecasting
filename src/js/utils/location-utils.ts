@@ -22,7 +22,9 @@ function onGetLocationSuccess(position: GeolocationPosition) {
 function onGetLocationError(error: GeolocationPositionError) {
   console.log(error);
 
-  throw new Error('Unable to retrieve your current location');
+  return new Error(
+    'Unable to retrieve your current location. You must allow this device to access your location.'
+  );
 }
 
 // Current location for locale storage

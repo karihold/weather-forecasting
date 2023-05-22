@@ -17,12 +17,20 @@ import {
 } from '../utils/location-utils';
 import { DEFAULT_LOCATIONS } from '../constants/locations';
 
+type WeatherError = {
+  type: 'Initialize' | 'My location' | 'Add location';
+  message: string;
+};
+
 type WeatherContext = {
   allWeatherData: Weather[];
+  initWeatherData: () => void;
   getWeatherDataForLocation: (location: string) => Weather | undefined;
   addLocation: (location: string) => Promise<void>;
   getMyLocation: () => void;
+  resetWeatherError: () => void;
   isLoadingWeather: boolean;
+  errorWithWeather: undefined | WeatherError;
 };
 
 const WeatherContext = createContext<WeatherContext>({} as WeatherContext);
@@ -36,6 +44,7 @@ type WeatherProviderProps = {
 export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   const [allWeatherData, setWeatherData] = useState<Weather[]>([]);
   const [isLoadingWeather, setIsLoadingWeather] = useState(true);
+  const [errorWithWeather, setErrorWithWeather] = useState<undefined | WeatherError>(undefined);
 
   const weatherMap = useRef(new Map<string, Weather>());
 
@@ -44,34 +53,45 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   }, []);
 
   async function initWeatherData() {
-    const currentCoordinates = getCurrentLocationFromLocalStorage();
-    const storedLocations = getLocationsFromLocaleStorage();
-    let weatherForCurrentPosition = [] as Weather[];
-    let weatherForStoreLocations = [] as Weather[];
-
-    if (currentCoordinates) {
-      const weatherDataForMyLocation = await getWeatherForCoordinates(
-        currentCoordinates.lat,
-        currentCoordinates.lon
-      );
-
-      weatherForCurrentPosition = [{ ...weatherDataForMyLocation, isCurrentPosition: true }];
+    if (!isLoadingWeather) {
+      setIsLoadingWeather(true);
     }
 
-    if (storedLocations) {
-      weatherForStoreLocations = await getWeatherForMultipleLocations(storedLocations);
+    resetWeatherError();
+
+    try {
+      const currentCoordinates = getCurrentLocationFromLocalStorage();
+      const storedLocations = getLocationsFromLocaleStorage();
+      let weatherForCurrentPosition = [] as Weather[];
+      let weatherForStoreLocations = [] as Weather[];
+
+      if (currentCoordinates) {
+        const weatherDataForMyLocation = await getWeatherForCoordinates(
+          currentCoordinates.lat,
+          currentCoordinates.lon
+        );
+
+        weatherForCurrentPosition = [{ ...weatherDataForMyLocation, isCurrentPosition: true }];
+      }
+
+      if (storedLocations) {
+        weatherForStoreLocations = await getWeatherForMultipleLocations(storedLocations);
+      }
+
+      const allWeatherDataFromApi = await getWeatherForMultipleLocations(DEFAULT_LOCATIONS);
+      const combinedWeatherData = [
+        ...weatherForCurrentPosition,
+        ...allWeatherDataFromApi,
+        ...weatherForStoreLocations,
+      ];
+
+      addLocationsToWeatherMap(combinedWeatherData);
+      setWeatherData(combinedWeatherData);
+      setIsLoadingWeather(false);
+    } catch (error) {
+      setIsLoadingWeather(false);
+      setErrorWithWeather({ type: 'Initialize', message: (error as Error).message });
     }
-
-    const allWeatherDataFromApi = await getWeatherForMultipleLocations(DEFAULT_LOCATIONS);
-    const combinedWeatherData = [
-      ...weatherForCurrentPosition,
-      ...allWeatherDataFromApi,
-      ...weatherForStoreLocations,
-    ];
-
-    addLocationsToWeatherMap(combinedWeatherData);
-    setWeatherData(combinedWeatherData);
-    setIsLoadingWeather(false);
   }
 
   function addLocationsToWeatherMap(allWeatherData: Weather[]) {
@@ -84,47 +104,65 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
 
   async function addLocation(location: string) {
     setIsLoadingWeather(true);
+    resetWeatherError();
 
     if (weatherMap.current.has(location.toLocaleLowerCase())) {
       setIsLoadingWeather(false);
       return;
     }
 
-    const weatherForLocation = await getWeatherForLocation(location);
+    try {
+      const weatherForLocation = await getWeatherForLocation(location);
 
-    setLocationInLocaleStorage(location);
-    addLocationsToWeatherMap([weatherForLocation]);
+      setLocationInLocaleStorage(location);
+      addLocationsToWeatherMap([weatherForLocation]);
 
-    setWeatherData((currentWeatherData) => {
-      const updatedWeatherData = [...currentWeatherData, weatherForLocation];
+      setWeatherData((currentWeatherData) => {
+        const updatedWeatherData = [...currentWeatherData, weatherForLocation];
 
-      return updatedWeatherData;
-    });
+        return updatedWeatherData;
+      });
 
-    setIsLoadingWeather(false);
+      setIsLoadingWeather(false);
+    } catch (error) {
+      setIsLoadingWeather(false);
+      setErrorWithWeather({ type: 'Add location', message: (error as Error).message });
+    }
   }
 
   async function getMyLocation() {
     setIsLoadingWeather(true);
+    resetWeatherError();
 
-    const { lat, lon } = await getCurrentLocation();
+    try {
+      const { lat, lon } = await getCurrentLocation();
 
-    const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
-    const weatherForMyLocation = { ...weatherDataFromApi, isCurrentPosition: true } as Weather;
+      const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
+      const weatherForMyLocation = { ...weatherDataFromApi, isCurrentPosition: true } as Weather;
 
-    addLocationsToWeatherMap([weatherForMyLocation]);
+      addLocationsToWeatherMap([weatherForMyLocation]);
 
-    setWeatherData((currentWeatherData) => {
-      const currentWeatherDataToKeep = hasCurrentLocationInLocaleStorage()
-        ? currentWeatherData.slice(1)
-        : currentWeatherData;
+      setWeatherData((currentWeatherData) => {
+        const currentWeatherDataToKeep = hasCurrentLocationInLocaleStorage()
+          ? currentWeatherData.slice(1)
+          : currentWeatherData;
 
-      setCurrentLocationInLocalStorage({ lat, lon });
+        setCurrentLocationInLocalStorage({ lat, lon });
 
-      return [weatherForMyLocation, ...currentWeatherDataToKeep];
-    });
+        return [weatherForMyLocation, ...currentWeatherDataToKeep];
+      });
 
-    setIsLoadingWeather(false);
+      setIsLoadingWeather(false);
+    } catch (error) {
+      setIsLoadingWeather(false);
+      setErrorWithWeather({ type: 'My location', message: (error as Error).message });
+    }
+  }
+
+  function resetWeatherError() {
+    if (errorWithWeather) {
+      setErrorWithWeather(undefined);
+    }
   }
 
   function getWeatherDataForLocation(location: string) {
@@ -135,10 +173,13 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     <WeatherContext.Provider
       value={{
         allWeatherData,
+        initWeatherData,
         getWeatherDataForLocation,
         addLocation,
         getMyLocation,
         isLoadingWeather,
+        errorWithWeather,
+        resetWeatherError,
       }}
     >
       {children}

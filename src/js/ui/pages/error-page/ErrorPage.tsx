@@ -1,8 +1,11 @@
 import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom';
 
+import { useWeather } from '../../../contexts/weather-context';
+
 import './ErrorPage.scss';
 
 const ErrorPage = () => {
+  const { resetWeatherError } = useWeather();
   const error = useRouteError();
 
   console.error(error);
@@ -12,7 +15,12 @@ const ErrorPage = () => {
       <h1>Woops!</h1>
       <p>An unexcpected error occured</p>
       <RouteErrorMessage error={error} />
-      <Link to="/">Go back to dashboard</Link>
+      <Link
+        to="/"
+        onClick={resetWeatherError}
+      >
+        Go back to dashboard
+      </Link>
     </section>
   );
 };
