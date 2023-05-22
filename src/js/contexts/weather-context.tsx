@@ -74,6 +74,14 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     setIsLoadingWeather(false);
   }
 
+  function addLocationsToWeatherMap(allWeatherData: Weather[]) {
+    allWeatherData.forEach((data) => {
+      const locationMapKey = toLowerCaseAndHyphenateText(data.name);
+
+      weatherMap.current.set(locationMapKey, data);
+    });
+  }
+
   async function addLocation(location: string) {
     if (weatherMap.current.has(location.toLocaleLowerCase())) return;
 
@@ -105,14 +113,6 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
       setCurrentLocationInLocalStorage({ lat, lon });
 
       return [weatherForMyLocation, ...currentWeatherDataToKeep];
-    });
-  }
-
-  function addLocationsToWeatherMap(allWeatherData: Weather[]) {
-    allWeatherData.forEach((data) => {
-      const locationMapKey = toLowerCaseAndHyphenateText(data.name);
-
-      weatherMap.current.set(locationMapKey, data);
     });
   }
 
