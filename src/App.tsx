@@ -57,7 +57,7 @@ const App = () => {
             options={[
               { label: 'Celsius', value: 'celsius', isChecked: temperatureUnit === 'celsius' },
               {
-                label: 'Farenheit',
+                label: 'Fahrenheit',
                 value: 'fahrenheit',
                 isChecked: temperatureUnit === 'fahrenheit',
               },
