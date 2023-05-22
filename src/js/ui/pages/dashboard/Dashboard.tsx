@@ -13,7 +13,12 @@ const Dashboard = () => {
   return (
     <section className="dashboard">
       <div className="dashboard-actions">
-        <button onClick={getMyLocation}>Get my location</button>
+        <button
+          type="button"
+          onClick={getMyLocation}
+        >
+          Get my location
+        </button>
         <InputForm
           submitLabel="Add location"
           onSubmit={addLocation}

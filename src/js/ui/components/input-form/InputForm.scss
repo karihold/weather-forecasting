@@ -20,5 +20,10 @@
 
   button {
     border-radius: 0 0.5rem 0.5rem 0;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }

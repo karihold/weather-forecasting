@@ -20,6 +20,7 @@ const InputForm = ({ onSubmit, submitLabel = 'Submit' }: InputFormProps) => {
       }}
     >
       <input
+        type="text"
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
