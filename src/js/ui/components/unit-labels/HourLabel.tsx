@@ -1,4 +1,4 @@
-import { convertUtcToHoursAndMinutes } from '../../../utils/time-utils';
+import { convertUnixToHoursAndMinutes } from '../../../utils/time-utils';
 
 import './HourLabel.scss';
 
@@ -8,7 +8,7 @@ type HourLabelProps = {
 };
 
 const HourLabel = ({ value, colorCode }: HourLabelProps) => {
-  const timeValue = convertUtcToHoursAndMinutes(value);
+  const timeValue = convertUnixToHoursAndMinutes(value);
 
   return (
     <time
