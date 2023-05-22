@@ -38,14 +38,15 @@
   dl {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-  }
+    gap: 0.8rem;
 
-  dl > div {
-    display: flex;
-    flex-flow: row wrap;
+    & > div {
+      display: flex;
+      flex-flow: row wrap;
 
-    dt {
-      margin-right: 4px;
+      dt {
+        margin-right: 4px;
+      }
     }
   }
 }
