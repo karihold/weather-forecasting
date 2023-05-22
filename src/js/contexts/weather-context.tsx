@@ -75,6 +75,8 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   }
 
   async function addLocationWeather(location: string) {
+    if (weatherMap.current.has(location.toLocaleLowerCase())) return;
+
     const weatherForLocation = await getWeatherForLocation(location);
 
     setLocationInLocaleStorage(location);
