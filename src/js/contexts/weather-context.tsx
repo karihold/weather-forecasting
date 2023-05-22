@@ -20,7 +20,7 @@ import { DEFAULT_LOCATIONS } from '../constants/locations';
 type WeatherContext = {
   allWeatherData: Weather[];
   getWeatherDataForLocation: (location: string) => Weather | undefined;
-  addLocationWeather: (location: string) => Promise<void>;
+  addLocation: (location: string) => Promise<void>;
   getMyLocation: () => void;
   isLoadingWeather: boolean;
 };
@@ -74,7 +74,7 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
     setIsLoadingWeather(false);
   }
 
-  async function addLocationWeather(location: string) {
+  async function addLocation(location: string) {
     if (weatherMap.current.has(location.toLocaleLowerCase())) return;
 
     const weatherForLocation = await getWeatherForLocation(location);
@@ -125,7 +125,7 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
       value={{
         allWeatherData,
         getWeatherDataForLocation,
-        addLocationWeather,
+        addLocation,
         getMyLocation,
         isLoadingWeather,
       }}

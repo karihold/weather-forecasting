@@ -7,15 +7,15 @@ import LocationLink from '../../components/location-link/LocationLink';
 import './Dashboard.scss';
 
 const Dashboard = () => {
-  const { allWeatherData, addLocationWeather, getMyLocation } = useWeather();
+  const { allWeatherData, addLocation, getMyLocation } = useWeather();
 
   return (
     <section className="dashboard">
       <div className="dashboard-actions">
         <button onClick={getMyLocation}>Get my location</button>
         <InputForm
-          submitLabel="Find location"
-          onSubmit={addLocationWeather}
+          submitLabel="Add location"
+          onSubmit={addLocation}
         />
       </div>
       <ul className="location-grid">
