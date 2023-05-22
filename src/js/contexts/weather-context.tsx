@@ -83,7 +83,12 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   }
 
   async function addLocation(location: string) {
-    if (weatherMap.current.has(location.toLocaleLowerCase())) return;
+    setIsLoadingWeather(true);
+
+    if (weatherMap.current.has(location.toLocaleLowerCase())) {
+      setIsLoadingWeather(false);
+      return;
+    }
 
     const weatherForLocation = await getWeatherForLocation(location);
 
@@ -95,9 +100,13 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
 
       return updatedWeatherData;
     });
+
+    setIsLoadingWeather(false);
   }
 
   async function getMyLocation() {
+    setIsLoadingWeather(true);
+
     const { lat, lon } = await getCurrentLocation();
 
     const weatherDataFromApi = await getWeatherForCoordinates(lat, lon);
@@ -114,6 +123,8 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
 
       return [weatherForMyLocation, ...currentWeatherDataToKeep];
     });
+
+    setIsLoadingWeather(false);
   }
 
   function getWeatherDataForLocation(location: string) {
